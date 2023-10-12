@@ -10,6 +10,7 @@ add_vec2(struct Vec2 a, struct Vec2 b) {
         .x = a.x + b.x, 
         .y = a.y + b.y };
 }
+struct Vec2 screen_size = {.x=0,.y=0};
 
 struct Actor {
     char character;
@@ -37,6 +38,18 @@ enum Tile {
     T_OBSTACLE      = ATTR_OBSTACLE,
     T_HOUSE         = ATTR_OBSTACLE | ATTR_IS_HOUSE
 };
+// Influence Colors
+enum Color {
+    NONE            = 0,
+    RED_PLAYER      = 1,
+    RED_LOW         = 2,
+    RED_MID         = 3,
+    RED_HIGH        = 4,
+    BLUE_PLAYER     = 5,
+    BLUE_LOW        = 6,
+    BLUE_MID        = 7,
+    BLUE_HIGH       = 8,
+};
 
 int 
 main(){
@@ -45,11 +58,27 @@ main(){
     cbreak();
     keypad(stdscr, true);
     noecho();
+    start_color();
     curs_set(0);
+    getmaxyx(stdscr, screen_size.y, screen_size.x);
+    init_pair(NONE, COLOR_WHITE, COLOR_BLACK);
+    init_pair(RED_PLAYER, COLOR_RED, COLOR_BLACK);
+    init_pair(RED_LOW, COLOR_YELLOW, COLOR_BLACK);
+    init_pair(RED_MID, COLOR_RED, COLOR_YELLOW);
+    init_pair(RED_HIGH, COLOR_YELLOW, COLOR_RED);
+    init_pair(BLUE_PLAYER, COLOR_BLUE, COLOR_BLACK);
+    init_pair(BLUE_LOW, COLOR_CYAN, COLOR_BLACK);
+    init_pair(BLUE_MID, COLOR_BLUE, COLOR_CYAN);
+    init_pair(BLUE_HIGH, COLOR_CYAN, COLOR_BLUE);
 
-    struct Actor player={.character = '&', .pos = {.x=0,.y=0}};
+    struct Actor player={.character = '&', .pos = {.x=screen_size.x/2,.y=screen_size.y/2}};
+    int i = 0;
     while( ch != 'q' ) {
-        mvaddch(player.pos.y, player.pos.x,player.character|A_BOLD);
+        i= (i+1)%9;
+        getmaxyx(stdscr, screen_size.y, screen_size.x);
+        attron(COLOR_PAIR(i));
+        mvaddch(player.pos.y, player.pos.x,player.character);
+        attroff(COLOR_PAIR(i));
         refresh();
         ch = getch();
         struct Vec2 move = {0,0};
