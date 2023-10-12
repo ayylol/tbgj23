@@ -6,7 +6,7 @@ uint8_t map[4][4] = {
     {T_ROAD,    T_GRASS,    T_GRASS,    T_ROAD},
     {T_ROAD,    T_HOUSE,    T_OBSTACLE, T_ROAD},
     {T_ROAD,    T_OBSTACLE, T_HOUSE,    T_ROAD},
-    {T_ROAD,   T_GRASS,    T_GRASS,    T_ROAD}
+    {T_ROAD,    T_GRASS,    T_GRASS,    T_ROAD}
 };
 
 struct Vec2 
@@ -68,23 +68,37 @@ draw_map(){
 bool
 get_input(){
     uint32_t input = getch();
-    struct Vec2 move = {0,0};
+    struct Vec2 move1 = {0,0};
+    struct Vec2 move2 = {0,0};
     switch (input){
     case 'q':
         return true;
     case KEY_LEFT:
-        move.x -= 1;
+        move1.x -= 1;
         break;
     case KEY_RIGHT:
-        move.x += 1;
+        move1.x += 1;
         break;
     case KEY_DOWN:
-        move.y += 1;
+        move1.y += 1;
         break;
     case KEY_UP:
-        move.y -= 1;
+        move1.y -= 1;
+        break;
+    case 'a':
+        move2.x -= 1;
+        break;
+    case 'd':
+        move2.x += 1;
+        break;
+    case 's':
+        move2.y += 1;
+        break;
+    case 'w':
+        move2.y -= 1;
         break;
     }
-    actor_move(&game.p1,move, &game.p2);
+    actor_move(&game.p1,move1, &game.p2);
+    actor_move(&game.p2,move2, &game.p1);
     return false;
 }
