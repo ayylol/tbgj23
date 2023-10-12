@@ -13,8 +13,9 @@ struct Game {
     struct Vec2 bound;
 };
 
-struct Vec2 actor_move(struct Actor *a, struct Vec2 move);
+struct Vec2 actor_move(struct Actor *a, struct Vec2 move, struct Actor *b);
 
 void init_game();
 void play_game();
 void draw_map();
+bool get_input();
